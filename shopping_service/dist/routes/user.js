@@ -1,0 +1,11 @@
+import { Router } from "express";
+import { getMyProfile, login, logOut, signUp } from "../controllers/coustomer.js";
+import { upload } from "../middleare/multer.js";
+import { auth } from "../middleare/auth.js";
+const app = Router();
+app.post("/signUp", upload, signUp);
+app.post("/signIn", upload, login);
+app.use(auth);
+app.get("/me", getMyProfile);
+app.get("/logOut", logOut);
+export default app;
