@@ -1,11 +1,12 @@
 import * as amqplib from 'amqplib';
-import { json } from 'body-parser';
 import { v4 as uuid } from 'uuid';
 
 // Constants
-const msgQueueUrl = 'amqps://cxcygule:DlO9FUKjM0ctgBDWBjxgmepdJhpaP4Gm@puffin.rmq2.cloudamqp.com/cxcygule';
+const msgQueueUrl = process.env.QUEUE as string
 const exchangeName = 'my_exchange';
-const userService = 'user_service';
+const customerService = process.env.CUSTOMER_SERVICE as string
+const productService = process.env.PRODUCT_SERVICE as string
+export const shoppingService = process.env.SHOPPING_SERVICE as string
 
 // Connection and Channel Management
 let amqplibConnection: amqplib.Connection;
@@ -40,7 +41,7 @@ export const subscribeMessage = async (channel: amqplib.Channel, service: { Subs
   const q = await channel.assertQueue("", { exclusive: true });
   console.log(`Waiting for messages in queue: ${q.queue}`);
 
-  channel.bindQueue(q.queue, exchangeName, userService);
+  channel.bindQueue(q.queue, exchangeName, customerService);
 
   const handleMessage = (msg: amqplib.ConsumeMessage | null) => {
     if (msg && msg.content) {

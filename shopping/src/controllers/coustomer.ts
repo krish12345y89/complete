@@ -85,6 +85,7 @@ export const createOrder = async (req: Request, res: Response, next: NextFunctio
     });
     const items = cart.items;
     const order = await Order.create({ total: totalPrice, items, user: id, status: "received" });
+    
     if (order) {
       cart.items=[];
       await cart.save();

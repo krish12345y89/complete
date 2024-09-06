@@ -1,16 +1,9 @@
 FROM node
-
-WORKDIR /microservices/product
-
-COPY package.json  .
+WORKDIR /app
+COPY package*.json /app
 RUN npm install
-COPY tsconfig.json .
-# Install TypeScript
-RUN npm install -g typescript
-RUN tsc 
-RUN tsc -w
-
-COPY . .
+COPY . /app
+RUN npm run build
 EXPOSE 6000
+CMD ["npm", "run","start"]
 
-RUN ["npm","start"]

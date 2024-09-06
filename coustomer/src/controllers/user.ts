@@ -8,6 +8,7 @@ import { Address } from "../models/address.js";
 import { getChannel, publishMessage } from "../features/micro_utils.js";
 import { client } from "../utils/redis.js";
 const SECRET_KEY = process.env.SECRET_KEY as string
+import {shoppingService} from "../features/micro_utils.js"
 export const signUp = async (req: Request<{}, {}, { name: string, username: string, email: string, password: string }>, res: Response, next: NextFunction) => {
     try {
         const { name, email, password, username } = req.body;
@@ -154,7 +155,7 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
         const data = id;
         const msg = "delete all the data of user from shopping service"
         const payload = { data, event, msg }
-        publishMessage(channel, "shopping_service", payload);
+        publishMessage(channel,shoppingService, payload);
         if (await client.exists(`user:${id}`)) {
             await client.del(`user:${id}`);
         }
